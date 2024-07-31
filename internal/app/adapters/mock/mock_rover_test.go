@@ -4,17 +4,17 @@ import (
 	"testing"
 
 	"github.com/alejandrososa/mars-rover-go/internal/app/adapters/mock"
-	"github.com/alejandrososa/mars-rover-go/internal/app/platform"
+	"github.com/alejandrososa/mars-rover-go/internal/app/core/entities"
 	"github.com/alejandrososa/mars-rover-go/internal/app/ports"
 )
 
-func setupTestPlatform() *platform.Platform {
-	return platform.NewPlatform(10, 10, []ports.Position{})
+func setupTestPlatform() *entities.Platform {
+	return entities.NewPlatform(10, 10, []ports.Position{})
 }
 
-func setupTestPlatformWithObstacles() *platform.Platform {
+func setupTestPlatformWithObstacles() *entities.Platform {
 	obstacles := []ports.Position{{X: 0, Y: 1}}
-	return platform.NewPlatform(10, 10, obstacles)
+	return entities.NewPlatform(10, 10, obstacles)
 }
 
 func TestMove(t *testing.T) {
@@ -64,7 +64,7 @@ func TestMoveAndTurn(t *testing.T) {
 }
 
 func TestWrapAround(t *testing.T) {
-	plt := platform.NewPlatform(10, 10, []ports.Position{}, true) // allowWrapAround = true
+	plt := entities.NewPlatform(10, 10, []ports.Position{}, true) // allowWrapAround = true
 	rover, _ := mock.NewMockRover(0, 9, "N", plt)
 	rover.Move()
 	x, y := rover.GetPosition()
@@ -117,7 +117,7 @@ func TestObstacleEncounter(t *testing.T) {
 }
 
 func TestSetObstaclesIntegration(t *testing.T) {
-	plt := platform.NewPlatform(10, 10, []ports.Position{{X: 1, Y: 0}}, false) // allowWrapAround = false
+	plt := entities.NewPlatform(10, 10, []ports.Position{{X: 1, Y: 0}}, false) // allowWrapAround = false
 	rover, _ := mock.NewMockRover(0, 0, "N", plt)
 
 	rover.SetObstacles([]ports.Position{{X: 0, Y: 1}})

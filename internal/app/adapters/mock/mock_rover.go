@@ -3,17 +3,17 @@ package mock
 import (
 	"errors"
 
-	"github.com/alejandrososa/mars-rover-go/internal/app/platform"
+	"github.com/alejandrososa/mars-rover-go/internal/app/core/entities"
 	"github.com/alejandrososa/mars-rover-go/internal/app/ports"
 )
 
 type MockRover struct {
 	x, y      int
 	direction string
-	platform  *platform.Platform
+	platform  *entities.Platform
 }
 
-func NewMockRover(x, y int, direction string, platform *platform.Platform) (ports.RoverControl, error) {
+func NewMockRover(x, y int, direction string, platform *entities.Platform) (ports.RoverControl, error) {
 	if direction != "N" && direction != "E" && direction != "S" && direction != "W" {
 		return nil, errors.New("invalid direction")
 	}

@@ -1,10 +1,10 @@
-package platform_test
+package entities_test
 
 import (
 	"testing"
 
 	"github.com/alejandrososa/mars-rover-go/internal/app/adapters/mock"
-	"github.com/alejandrososa/mars-rover-go/internal/app/platform"
+	platform "github.com/alejandrososa/mars-rover-go/internal/app/core/entities"
 	"github.com/alejandrososa/mars-rover-go/internal/app/ports"
 )
 

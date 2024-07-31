@@ -1,4 +1,4 @@
-package platform
+package entities
 
 import "github.com/alejandrososa/mars-rover-go/internal/app/ports"
 

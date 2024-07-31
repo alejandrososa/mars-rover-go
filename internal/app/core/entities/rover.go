@@ -1,4 +1,4 @@
-package core
+package entities
 
 type Direction string
 
