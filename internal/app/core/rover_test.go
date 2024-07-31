@@ -13,7 +13,7 @@ func TestNewRoverInitialization(t *testing.T) {
 		t.Errorf("Expected position (0, 0), got (%d, %d)", rover.Position.X, rover.Position.Y)
 	}
 
-	if rover.Direction != 0 || core.North {
+	if rover.Direction != core.North {
 		t.Errorf("Expected direction North, got %s", rover.Direction)
 	}
 }
