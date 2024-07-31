@@ -2,15 +2,18 @@ package platform
 
 import "github.com/alejandrososa/mars-rover-go/internal/app/ports"
 
+// Platform represents the surface on which the rover is moving.
 type Platform struct {
 	width, height int
 	obstacles     []ports.Position
 }
 
+// NewPlatform creates a new instance of Platform with the given dimensions and obstacles.
 func NewPlatform(width, height int, obstacles []ports.Position) *Platform {
 	return &Platform{width: width, height: height, obstacles: obstacles}
 }
 
+// IsValidPosition checks if a position (x, y) is valid on the platform
 func (p *Platform) IsValidPosition(x, y int) bool {
 	if x < 0 || x >= p.width || y < 0 || y >= p.height {
 		return false
@@ -21,4 +24,9 @@ func (p *Platform) IsValidPosition(x, y int) bool {
 		}
 	}
 	return true
+}
+
+// SetObstacles updates the obstacles on the platform
+func (p *Platform) SetObstacles(obstacles []ports.Position) {
+	p.obstacles = obstacles
 }
