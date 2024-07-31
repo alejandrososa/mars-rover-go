@@ -1,11 +1,9 @@
 package entities
 
-import "github.com/alejandrososa/mars-rover-go/internal/app/ports"
-
 // Platform represents the surface on which the rover is moving.
 type Platform struct {
 	Width, Height int
-	Obstacles     []ports.Position
+	Obstacles     []Position
 	// AllowWrapAround determines whether the rover wraps around the platform's boundaries.
 	// If true, the platform has no physical limits, and the rover reappears on the opposite side when crossing an edge.
 	// Example: From (9, 5) moving east results in (0, 5).
@@ -15,7 +13,7 @@ type Platform struct {
 }
 
 // NewPlatform creates a new instance of Platform with the given dimensions and obstacles.
-func NewPlatform(width, height int, obstacles []ports.Position, options ...bool) *Platform {
+func NewPlatform(width, height int, obstacles []Position, options ...bool) *Platform {
 	allowWrapAround := false // value by default
 	if len(options) > 0 {
 		allowWrapAround = options[0]
@@ -42,6 +40,6 @@ func (p *Platform) IsValidPosition(x, y int) bool {
 }
 
 // SetObstacles updates the obstacles on the platform
-func (p *Platform) SetObstacles(obstacles []ports.Position) {
+func (p *Platform) SetObstacles(obstacles []Position) {
 	p.Obstacles = obstacles
 }
