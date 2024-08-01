@@ -1,15 +1,15 @@
 package mock
 
 import (
-	"github.com/alejandrososa/mars-rover-go/internal/app/core/entities"
+	"github.com/alejandrososa/mars-rover-go/internal/app/core/domain"
 )
 
 type MockRover struct {
-	Rover *entities.Rover
+	Rover *domain.Rover
 }
 
-func NewMockRover(x, y int, direction entities.Direction, platform *entities.Platform) *MockRover {
-	baseRover, _ := entities.NewRover(x, y, direction, platform)
+func NewMockRover(x, y int, direction domain.Direction, platform *domain.Platform) *MockRover {
+	baseRover, _ := domain.NewRover(x, y, direction, platform)
 	return &MockRover{
 		Rover: baseRover,
 	}
@@ -27,18 +27,18 @@ func (m *MockRover) TurnRight() {
 	m.Rover.TurnRight()
 }
 
-func (m *MockRover) GetPosition() entities.Position {
+func (m *MockRover) GetPosition() domain.Position {
 	return m.Rover.GetPosition()
 }
 
-func (m *MockRover) GetDirection() entities.Direction {
+func (m *MockRover) GetDirection() domain.Direction {
 	return m.Rover.GetDirection()
 }
 
-func (m *MockRover) SetObstacles(obstacles []entities.Position) {
+func (m *MockRover) SetObstacles(obstacles []domain.Position) {
 	m.Rover.SetObstacles(obstacles)
 }
 
-func (m *MockRover) ExecuteCommand(command entities.Command) error {
+func (m *MockRover) ExecuteCommand(command domain.Command) error {
 	return m.Rover.ExecuteCommand(command)
 }

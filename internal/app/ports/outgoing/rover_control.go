@@ -1,4 +1,4 @@
-package ports
+package outgoing
 
 type Position struct {
 	X int

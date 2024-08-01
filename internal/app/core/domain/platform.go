@@ -1,4 +1,4 @@
-package entities
+package domain
 
 // Platform represents the surface on which the rover is moving.
 type Platform struct {

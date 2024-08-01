@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"github.com/alejandrososa/mars-rover-go/internal/app/adapters/mock"
-	"github.com/alejandrososa/mars-rover-go/internal/app/core/entities"
+	"github.com/alejandrososa/mars-rover-go/internal/app/core/domain"
 )
 
 func TestMockRover_Move(t *testing.T) {
-	plt := entities.NewPlatform(10, 10, []entities.Position{})
-	rover := mock.NewMockRover(0, 0, entities.North, plt)
+	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	rover := mock.NewMockRover(0, 0, domain.North, plt)
 
 	rover.Move()
 	position := rover.GetPosition()
@@ -20,34 +20,34 @@ func TestMockRover_Move(t *testing.T) {
 }
 
 func TestMockRover_TurnLeft(t *testing.T) {
-	plt := entities.NewPlatform(10, 10, []entities.Position{})
-	rover := mock.NewMockRover(0, 0, entities.North, plt)
+	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	rover := mock.NewMockRover(0, 0, domain.North, plt)
 
 	rover.TurnLeft()
 	direction := rover.GetDirection()
 
-	if direction != entities.West {
+	if direction != domain.West {
 		t.Errorf("Expected direction West, got %s", direction)
 	}
 }
 
 func TestMockRover_TurnRight(t *testing.T) {
-	plt := entities.NewPlatform(10, 10, []entities.Position{})
-	rover := mock.NewMockRover(0, 0, entities.North, plt)
+	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	rover := mock.NewMockRover(0, 0, domain.North, plt)
 
 	rover.TurnRight()
 	direction := rover.GetDirection()
 
-	if direction != entities.East {
+	if direction != domain.East {
 		t.Errorf("Expected direction East, got %s", direction)
 	}
 }
 
 func TestMockRover_SetObstacles(t *testing.T) {
-	plt := entities.NewPlatform(10, 10, []entities.Position{})
-	rover := mock.NewMockRover(0, 0, entities.North, plt)
+	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	rover := mock.NewMockRover(0, 0, domain.North, plt)
 
-	obstacles := []entities.Position{{X: 0, Y: 1}}
+	obstacles := []domain.Position{{X: 0, Y: 1}}
 	rover.SetObstacles(obstacles)
 	rover.Move()
 	position := rover.GetPosition()
@@ -58,8 +58,8 @@ func TestMockRover_SetObstacles(t *testing.T) {
 }
 
 func TestMockRover_ExecuteCommand(t *testing.T) {
-	plt := entities.NewPlatform(10, 10, []entities.Position{})
-	rover := mock.NewMockRover(0, 0, entities.North, plt)
+	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	rover := mock.NewMockRover(0, 0, domain.North, plt)
 
 	err := rover.ExecuteCommand("M")
 	if err != nil {
@@ -75,7 +75,7 @@ func TestMockRover_ExecuteCommand(t *testing.T) {
 		t.Fatalf("Unexpected error: %v", err)
 	}
 	direction := rover.GetDirection()
-	if direction != entities.West {
+	if direction != domain.West {
 		t.Errorf("Expected direction West, got %s", direction)
 	}
 
