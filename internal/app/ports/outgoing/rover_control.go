@@ -1,9 +1,6 @@
 package outgoing
 
-type Position struct {
-	X int
-	Y int
-}
+import "github.com/alejandrososa/mars-rover-go/internal/app/common"
 
 type RoverControl interface {
 	Move()
@@ -11,6 +8,6 @@ type RoverControl interface {
 	TurnRight()
 	GetPosition() (int, int)
 	GetDirection() string
-	SetObstacles(obstacles []Position)
+	SetObstacles(obstacles []common.Position)
 	ExecuteCommand(command string) error
 }

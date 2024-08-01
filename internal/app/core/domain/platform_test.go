@@ -1,14 +1,14 @@
 package domain_test
 
 import (
-	"testing"
-
 	"github.com/alejandrososa/mars-rover-go/internal/app/adapters/mock"
+	"github.com/alejandrososa/mars-rover-go/internal/app/common"
 	"github.com/alejandrososa/mars-rover-go/internal/app/core/domain"
+	"testing"
 )
 
 func TestIsValidPosition(t *testing.T) {
-	obstacles := []domain.Position{{X: 2, Y: 2}}
+	obstacles := []common.Position{{X: 2, Y: 2}}
 	plt := domain.NewPlatform(10, 10, obstacles)
 
 	if !plt.IsValidPosition(1, 1) {
@@ -29,9 +29,9 @@ func TestIsValidPosition(t *testing.T) {
 }
 
 func TestAddObstacle(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{})
-	newObstacle := domain.Position{X: 5, Y: 5}
-	plt.SetObstacles([]domain.Position{newObstacle})
+	plt := domain.NewPlatform(10, 10, []common.Position{})
+	newObstacle := common.Position{X: 5, Y: 5}
+	plt.SetObstacles([]common.Position{newObstacle})
 
 	if plt.IsValidPosition(5, 5) {
 		t.Errorf("Expected position (5, 5) to be invalid due to new obstacle")
@@ -39,7 +39,7 @@ func TestAddObstacle(t *testing.T) {
 }
 
 func TestBoundaryConditions(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{})
+	plt := domain.NewPlatform(10, 10, []common.Position{})
 
 	// Test edges
 	if !plt.IsValidPosition(0, 0) {
@@ -61,11 +61,11 @@ func TestBoundaryConditions(t *testing.T) {
 }
 
 func TestRemoveObstacles(t *testing.T) {
-	obstacles := []domain.Position{{X: 1, Y: 1}, {X: 2, Y: 2}}
+	obstacles := []common.Position{{X: 1, Y: 1}, {X: 2, Y: 2}}
 	plt := domain.NewPlatform(10, 10, obstacles)
 
 	// Remove all obstacles
-	plt.SetObstacles([]domain.Position{})
+	plt.SetObstacles([]common.Position{})
 
 	// Ensure previous obstacle positions are now valid
 	if !plt.IsValidPosition(1, 1) {
@@ -78,10 +78,10 @@ func TestRemoveObstacles(t *testing.T) {
 }
 
 func TestAllowWrapAroundTrue(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{}, true)
+	plt := domain.NewPlatform(10, 10, []common.Position{}, true)
 
 	// Test wrap-around on the Y-axis
-	rover := mock.NewMockRover(5, 9, domain.North, plt)
+	rover := mock.NewMockRover(5, 9, common.North, plt)
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 
@@ -90,7 +90,7 @@ func TestAllowWrapAroundTrue(t *testing.T) {
 	}
 
 	// Test wrap-around on the X-axis
-	rover = mock.NewMockRover(9, 5, domain.East, plt)
+	rover = mock.NewMockRover(9, 5, common.East, plt)
 	rover.Move()
 	x, y = rover.GetPosition().X, rover.GetPosition().Y
 
@@ -100,7 +100,7 @@ func TestAllowWrapAroundTrue(t *testing.T) {
 }
 
 func TestAllowWrapAroundFalse(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{}, false)
+	plt := domain.NewPlatform(10, 10, []common.Position{}, false)
 
 	// Test no wrap-around on the X-axis
 	x, y := plt.Width-1, 5

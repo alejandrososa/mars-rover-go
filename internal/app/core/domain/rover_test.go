@@ -1,23 +1,23 @@
 package domain_test
 
 import (
-	"testing"
-
+	"github.com/alejandrososa/mars-rover-go/internal/app/common"
 	"github.com/alejandrososa/mars-rover-go/internal/app/core/domain"
+	"testing"
 )
 
 func setupTestPlatform() *domain.Platform {
-	return domain.NewPlatform(10, 10, []domain.Position{})
+	return domain.NewPlatform(10, 10, []common.Position{})
 }
 
 func setupTestPlatformWithObstacles() *domain.Platform {
-	obstacles := []domain.Position{{X: 0, Y: 1}}
+	obstacles := []common.Position{{X: 0, Y: 1}}
 	return domain.NewPlatform(10, 10, obstacles)
 }
 
 func TestMove(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, err := domain.NewRover(0, 0, domain.North, plt)
+	rover, err := domain.NewRover(0, 0, common.North, plt)
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -31,39 +31,39 @@ func TestMove(t *testing.T) {
 
 func TestTurnLeft(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
 	rover.TurnLeft()
-	if rover.GetDirection() != domain.West {
+	if rover.GetDirection() != common.West {
 		t.Errorf("Expected direction W, got %s", rover.GetDirection())
 	}
 }
 
 func TestTurnRight(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
 	rover.TurnRight()
-	if rover.GetDirection() != domain.East {
+	if rover.GetDirection() != common.East {
 		t.Errorf("Expected direction E, got %s", rover.GetDirection())
 	}
 }
 
 func TestMoveAndTurn(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
 	rover.Move()
 	rover.TurnRight()
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 	direction := rover.GetDirection()
 
-	if x != 1 || y != 1 || direction != domain.East {
+	if x != 1 || y != 1 || direction != common.East {
 		t.Errorf("Expected position (1, 1) and direction E, got (%d, %d) and %s", x, y, direction)
 	}
 }
 
 func TestWrapAround(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{}, true) // allowWrapAround = true
-	rover, _ := domain.NewRover(0, 9, domain.North, plt)
+	plt := domain.NewPlatform(10, 10, []common.Position{}, true) // allowWrapAround = true
+	rover, _ := domain.NewRover(0, 9, common.North, plt)
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 
@@ -74,7 +74,7 @@ func TestWrapAround(t *testing.T) {
 
 func TestNoWrapAround(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(0, 9, domain.North, plt)
+	rover, _ := domain.NewRover(0, 9, common.North, plt)
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 
@@ -85,7 +85,7 @@ func TestNoWrapAround(t *testing.T) {
 
 func TestSequentialCommands(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(1, 2, domain.North, plt)
+	rover, _ := domain.NewRover(1, 2, common.North, plt)
 	rover.TurnLeft()
 	rover.Move()
 	rover.TurnLeft()
@@ -98,15 +98,15 @@ func TestSequentialCommands(t *testing.T) {
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 	direction := rover.GetDirection()
 
-	if x != 1 || y != 3 || direction != domain.North {
+	if x != 1 || y != 3 || direction != common.North {
 		t.Errorf("Expected position (1, 3) and direction N, got (%d, %d) and %s", x, y, direction)
 	}
 }
 
 func TestObstacleEncounter(t *testing.T) {
 	plt := setupTestPlatformWithObstacles()
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
-	rover.SetObstacles([]domain.Position{{X: 0, Y: 1}})
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
+	rover.SetObstacles([]common.Position{{X: 0, Y: 1}})
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 	if x != 0 || y != 0 {
@@ -115,10 +115,10 @@ func TestObstacleEncounter(t *testing.T) {
 }
 
 func TestSetObstaclesIntegration(t *testing.T) {
-	plt := domain.NewPlatform(10, 10, []domain.Position{{X: 1, Y: 0}}, false) // allowWrapAround = false
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
+	plt := domain.NewPlatform(10, 10, []common.Position{{X: 1, Y: 0}}, false) // allowWrapAround = false
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
 
-	rover.SetObstacles([]domain.Position{{X: 0, Y: 1}})
+	rover.SetObstacles([]common.Position{{X: 0, Y: 1}})
 	rover.Move()
 	x, y := rover.GetPosition().X, rover.GetPosition().Y
 	if x != 0 || y != 0 {
@@ -137,7 +137,7 @@ func TestInvalidDirection(t *testing.T) {
 
 func TestInvalidCommand(t *testing.T) {
 	plt := setupTestPlatform()
-	rover, _ := domain.NewRover(0, 0, domain.North, plt)
+	rover, _ := domain.NewRover(0, 0, common.North, plt)
 	err := rover.ExecuteCommand("InvalidCommand")
 	if err == nil {
 		t.Error("Expected error for invalid command, got nil")

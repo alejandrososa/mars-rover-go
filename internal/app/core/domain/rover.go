@@ -2,44 +2,24 @@ package domain
 
 import (
 	"errors"
+	"github.com/alejandrososa/mars-rover-go/internal/app/common"
 )
-
-type Direction string
-type Command string
-
-const (
-	North Direction = "N"
-	East  Direction = "E"
-	South Direction = "S"
-	West  Direction = "W"
-)
-
-const (
-	CommandMove  Command = "M"
-	CommandLeft  Command = "L"
-	CommandRight Command = "R"
-)
-
-type Position struct {
-	X int
-	Y int
-}
 
 type Rover struct {
-	Position  Position
-	Direction Direction
-	Command   Command
+	Position  common.Position
+	Direction common.Direction
+	Command   common.Command
 	Platform  *Platform
 }
 
 // NewRover creates a new rover with the specified position and direction.
 // It returns a pointer to the Rover instance.
-func NewRover(x, y int, direction Direction, platform *Platform) (*Rover, error) {
-	if direction != North && direction != East && direction != South && direction != West {
+func NewRover(x, y int, direction common.Direction, platform *Platform) (*Rover, error) {
+	if direction != common.North && direction != common.East && direction != common.South && direction != common.West {
 		return nil, errors.New("invalid direction")
 	}
 	return &Rover{
-		Position:  Position{X: x, Y: y},
+		Position:  common.Position{X: x, Y: y},
 		Direction: direction,
 		Platform:  platform,
 	}, nil
@@ -48,13 +28,13 @@ func NewRover(x, y int, direction Direction, platform *Platform) (*Rover, error)
 func (r *Rover) Move() {
 	nextX, nextY := r.Position.X, r.Position.Y
 	switch r.Direction {
-	case North:
+	case common.North:
 		nextY++
-	case East:
+	case common.East:
 		nextX++
-	case South:
+	case common.South:
 		nextY--
-	case West:
+	case common.West:
 		nextX--
 	}
 
@@ -90,49 +70,49 @@ func (r *Rover) Move() {
 
 func (r *Rover) TurnLeft() {
 	switch r.Direction {
-	case North:
-		r.Direction = West
-	case West:
-		r.Direction = South
-	case South:
-		r.Direction = East
-	case East:
-		r.Direction = North
+	case common.North:
+		r.Direction = common.West
+	case common.West:
+		r.Direction = common.South
+	case common.South:
+		r.Direction = common.East
+	case common.East:
+		r.Direction = common.North
 	}
 }
 
 func (r *Rover) TurnRight() {
 	switch r.Direction {
-	case North:
-		r.Direction = East
-	case East:
-		r.Direction = South
-	case South:
-		r.Direction = West
-	case West:
-		r.Direction = North
+	case common.North:
+		r.Direction = common.East
+	case common.East:
+		r.Direction = common.South
+	case common.South:
+		r.Direction = common.West
+	case common.West:
+		r.Direction = common.North
 	}
 }
 
-func (r *Rover) GetPosition() Position {
+func (r *Rover) GetPosition() common.Position {
 	return r.Position
 }
 
-func (r *Rover) GetDirection() Direction {
+func (r *Rover) GetDirection() common.Direction {
 	return r.Direction
 }
 
-func (r *Rover) SetObstacles(obstacles []Position) {
+func (r *Rover) SetObstacles(obstacles []common.Position) {
 	r.Platform.SetObstacles(obstacles)
 }
 
-func (m *Rover) ExecuteCommand(command Command) error {
+func (m *Rover) ExecuteCommand(command common.Command) error {
 	switch command {
-	case CommandMove:
+	case common.CommandMove:
 		m.Move()
-	case CommandLeft:
+	case common.CommandLeft:
 		m.TurnLeft()
-	case CommandRight:
+	case common.CommandRight:
 		m.TurnRight()
 	default:
 		return errors.New("invalid command")
