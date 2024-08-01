@@ -1,0 +1,5 @@
+### GET request to health server
+GET http://localhost:8080/health
+Accept: application/json
+
+###
