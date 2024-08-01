@@ -33,21 +33,62 @@ MMRMMRMRRM
 5 1 E
 ```
 
-## Running the Tests
+## Mars Rover Project Execution
 
-1. **Install dependencies** (if any):
+### 1. **Preparation**
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/alejandrososa/mars-rover-go.git
+   cd mars-rover-go
+   ```
+
+2. Install dependencies:
    ```sh
    go mod tidy
    ```
 
-2. **Run the tests**:
+### 2. **Running the CLI**
+
+1. Build the CLI binary:
+   ```sh
+   go build -o bin/mars-rover-cli ./cmd/mars-rover-cli
+   ```
+
+2. Execute the CLI:
+   ```sh
+   ./bin/mars-rover-cli
+   ```
+
+### 3. **Running the HTTP Server**
+
+1. Build the HTTP server binary:
+   ```sh
+   go build -o bin/mars-rover-http ./cmd/mars-rover-http
+   ```
+
+2. Start the server:
+   ```sh
+   ./bin/mars-rover-http
+   ```
+
+3. Access the API at [http://localhost:8080](http://localhost:8080).
+
+### 4. **Usage**
+
+- **HTTP API**: Send a POST request to `/platform` with a JSON payload to create a platform.
+- **CLI**: Follow the console prompts to create a platform and add rovers.
+
+## Running the Tests
+
+1. **Run the tests**:
    ```sh
    go test ./...
    ```
 
-3. **Run the application**:
+2. **Run the application**:
    ```sh
-   go run cmd/mars-rover-go/main.go
+   go run cmd/mars-rover-http/main.go
    ```
 
 ## Assumptions
