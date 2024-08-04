@@ -3,9 +3,11 @@ package domain
 import (
 	"errors"
 	"github.com/alejandrososa/mars-rover-go/internal/app/common"
+	"github.com/google/uuid"
 )
 
 type Rover struct {
+	UUID      string
 	Position  common.Position
 	Direction common.Direction
 	Command   common.Command
@@ -19,6 +21,7 @@ func NewRover(x, y int, direction common.Direction, platform *Platform) (*Rover,
 		return nil, errors.New("invalid direction")
 	}
 	return &Rover{
+		UUID:      uuid.New().String(), // Generating a new UUID
 		Position:  common.Position{X: x, Y: y},
 		Direction: direction,
 		Platform:  platform,
@@ -93,6 +96,8 @@ func (r *Rover) TurnRight() {
 		r.Direction = common.North
 	}
 }
+
+func (r *Rover) GetUUID() string { return r.UUID }
 
 func (r *Rover) GetPosition() common.Position {
 	return r.Position

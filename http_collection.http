@@ -2,4 +2,19 @@
 GET http://localhost:8080/health
 Accept: application/json
 
-###
+
+### POST request to create a platform
+POST http://localhost:8080/create-mission-control
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "test_user",
+  "platform": {
+    "width": 10,
+    "height": 10
+  },
+  "rovers": {
+    "amount": 3
+  }
+}

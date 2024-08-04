@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/alejandrososa/mars-rover-go/internal/app/adapters/api/http/controllers"
+	"github.com/alejandrososa/mars-rover-go/internal/config"
 	"github.com/gorilla/mux"
 )
 
@@ -18,7 +18,10 @@ func NewRouter() *Router {
 }
 
 func (r *Router) SetupRoutes() {
-	healthCheckController := controllers.NewHealthCheckController()
+	healthCheckController := config.HealthCheckController
+	createPlatformController := config.CreatePlatformController
 
-	r.HandleFunc("/health", healthCheckController.CheckHealth).Methods("GET")
+	r.HandleFunc("/health", healthCheckController.HandleRequest).Methods("GET")
+	r.HandleFunc("/create-mission-control", createPlatformController.HandleRequest).Methods("POST")
+	// Add other routes and controllers here
 }
