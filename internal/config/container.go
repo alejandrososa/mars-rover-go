@@ -11,15 +11,17 @@ import (
 
 // Dependency container
 var (
-	HealthCheckController    *controllers.HealthCheckController
-	CreatePlatformController *controllers.CreateMissionControlController
-	PlatformRepository       outgoing.PlatformRepository
-	RoverRepository          outgoing.RoverRepository
-	MissionControlRepository outgoing.MissionControlRepository
-	UserRepository           outgoing.UserRepository
-	RoverFactory             domain.RoverFactoryInterface
-	CreatePlatformUseCase    *usecases.CreateMissionControlUseCase
-	UUIDGenerator            common.UUIDGenerator
+	HealthCheckController              *controllers.HealthCheckController
+	CreateMissionControlController     *controllers.CreateMissionControlController
+	GetMissionControlController        *controllers.GetMissionControlController
+	PlatformRepository                 outgoing.PlatformRepository
+	RoverRepository                    outgoing.RoverRepository
+	MissionControlRepository           outgoing.MissionControlRepository
+	UserRepository                     outgoing.UserRepository
+	RoverFactory                       domain.RoverFactoryInterface
+	CreateMissionControlUseCase        *usecases.CreateMissionControlUseCase
+	GetMissionControlByUsernameUseCase *usecases.GetMissionControlByUsernameUseCase
+	UUIDGenerator                      common.UUIDGenerator
 )
 
 func init() {
@@ -36,7 +38,7 @@ func init() {
 	RoverFactory = &domain.RoverFactory{}
 
 	// Initialize use cases
-	CreatePlatformUseCase = usecases.NewCreateMissionControlUseCase(
+	CreateMissionControlUseCase = usecases.NewCreateMissionControlUseCase(
 		PlatformRepository,
 		RoverRepository,
 		MissionControlRepository,
@@ -45,7 +47,14 @@ func init() {
 		UUIDGenerator,
 	)
 
-	//controllers
+	GetMissionControlByUsernameUseCase = usecases.NewGetMissionControlByUsernameUseCase(
+		MissionControlRepository,
+		UserRepository,
+	)
+
+	// Initialize controllers
 	HealthCheckController = controllers.NewHealthCheckController()
-	CreatePlatformController = controllers.NewCreateMissionControlController(CreatePlatformUseCase)
+	CreateMissionControlController = controllers.NewCreateMissionControlController(CreateMissionControlUseCase)
+	GetMissionControlController = controllers.NewGetMissionControlController(GetMissionControlByUsernameUseCase)
+
 }

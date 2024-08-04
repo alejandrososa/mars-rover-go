@@ -7,5 +7,6 @@ import (
 type UserRepository interface {
 	Save(user *domain.User) error
 	GetByUUID(uuid string) (*domain.User, error)
+	GetByUsername(username string) (*domain.User, error)
 	List() ([]*domain.User, error)
 }

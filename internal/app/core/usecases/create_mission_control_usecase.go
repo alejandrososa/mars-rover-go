@@ -37,7 +37,7 @@ func NewCreateMissionControlUseCase(
 }
 
 // Execute creates a new platform, mission control, and rovers, and saves them
-func (uc *CreateMissionControlUseCase) Execute(request dto.CreateMissionControlRequest) (*dto.CreatePlatformResponse, error) {
+func (uc *CreateMissionControlUseCase) Execute(request dto.CreateMissionControlRequest) (*dto.GetMissionControlResponse, error) {
 	// Retrieve or create the user
 	user := domain.NewUser(request.Username)
 	user.UUID = uc.UUIDGenerator.Generate()
@@ -87,8 +87,11 @@ func (uc *CreateMissionControlUseCase) Execute(request dto.CreateMissionControlR
 	}
 
 	// Create the response
-	response := &dto.CreatePlatformResponse{
+	response := &dto.GetMissionControlResponse{
 		Message: "Platform created successfully",
+		MissionControl: dto.MissionControlResponse{
+			UUID: missionControl.GetUUID(),
+		},
 		Platform: dto.PlatformResponse{
 			Width:  platform.Width,
 			Height: platform.Height,

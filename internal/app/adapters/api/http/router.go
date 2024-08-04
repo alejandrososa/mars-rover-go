@@ -19,9 +19,11 @@ func NewRouter() *Router {
 
 func (r *Router) SetupRoutes() {
 	healthCheckController := config.HealthCheckController
-	createPlatformController := config.CreatePlatformController
+	createMissionControlController := config.CreateMissionControlController
+	getMissionControlController := config.GetMissionControlController
 
-	r.HandleFunc("/health", healthCheckController.HandleRequest).Methods("GET")
-	r.HandleFunc("/create-mission-control", createPlatformController.HandleRequest).Methods("POST")
-	// Add other routes and controllers here
+	r.HandleFunc("/api/health", healthCheckController.HandleRequest).Methods("GET")
+	r.HandleFunc("/api/mission-control", createMissionControlController.HandleRequest).Methods("POST")
+	r.HandleFunc("/api/mission-control/{username}", getMissionControlController.HandleRequest).Methods("GET")
+
 }

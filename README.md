@@ -1,3 +1,4 @@
+```markdown
 # Mars Rover Go
 
 Mars Rover Go is a project simulating a Mars rover explorer using Go programming language and hexagonal architecture (Ports and Adapters). The project focuses on controlling the rover's movements and direction within a grid, showcasing modular software design. Key technologies include Go, CLI interface, and principles of clean architecture.
@@ -96,3 +97,38 @@ MMRMMRMRRM
 - Valid movements are: `L`, `R`, `M`.
 - Valid compass directions are: `N`, `S`, `E`, `W`.
 - Exception handling for moves outside the grid bounds or invalid inputs.
+
+## Using the Makefile
+
+To simplify the setup and execution of the project, you can use the provided Makefile:
+
+### 1. **Setup the environment**
+
+To install all necessary Go libraries and prepare the environment, run:
+   ```sh
+   make setup
+   ```
+
+### 2. **Build the project**
+
+To compile the HTTP server, use:
+   ```sh
+   make build
+   ```
+
+### 3. **Start the server**
+
+To start the HTTP server on port 8080, execute:
+   ```sh
+   make start
+   ```
+
+### 4. **Help**
+
+For more information about available commands and usage, run:
+   ```sh
+   make help
+   ```
+
+Please refer to this README file for detailed instructions on how to use the project and understand its features.
+```

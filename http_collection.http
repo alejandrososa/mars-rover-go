@@ -1,10 +1,9 @@
 ### GET request to health server
-GET http://localhost:8080/health
+GET http://localhost:8080/api/health
 Accept: application/json
 
-
-### POST request to create a platform
-POST http://localhost:8080/create-mission-control
+### POST request to create a mission control
+POST http://localhost:8080/api/mission-control
 Content-Type: application/json
 Accept: application/json
 
@@ -18,3 +17,7 @@ Accept: application/json
     "amount": 3
   }
 }
+
+### GET request to get mission control by username
+GET http://localhost:8080/api/mission-control/test_user
+Accept: application/json

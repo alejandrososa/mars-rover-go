@@ -26,6 +26,15 @@ func (repo *InMemoryUserRepository) GetByUUID(uuid string) (*domain.User, error)
 	return user, nil
 }
 
+func (repo *InMemoryUserRepository) GetByUsername(username string) (*domain.User, error) {
+	for _, user := range repo.users {
+		if user.GetUsername() == username {
+			return user, nil
+		}
+	}
+	return nil, errors.New("user not found")
+}
+
 func (repo *InMemoryUserRepository) List() ([]*domain.User, error) {
 	var users []*domain.User
 	for _, user := range repo.users {
