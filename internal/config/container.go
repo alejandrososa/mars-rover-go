@@ -14,6 +14,7 @@ var (
 	HealthCheckController              *controllers.HealthCheckController
 	CreateMissionControlController     *controllers.CreateMissionControlController
 	GetMissionControlController        *controllers.GetMissionControlController
+	MoveRoversController               *controllers.MoveRoversController
 	PlatformRepository                 outgoing.PlatformRepository
 	RoverRepository                    outgoing.RoverRepository
 	MissionControlRepository           outgoing.MissionControlRepository
@@ -21,6 +22,7 @@ var (
 	RoverFactory                       domain.RoverFactoryInterface
 	CreateMissionControlUseCase        *usecases.CreateMissionControlUseCase
 	GetMissionControlByUsernameUseCase *usecases.GetMissionControlByUsernameUseCase
+	MoveRoversUseCase                  *usecases.MoveRoversUseCase
 	UUIDGenerator                      common.UUIDGenerator
 )
 
@@ -52,9 +54,15 @@ func init() {
 		UserRepository,
 	)
 
+	MoveRoversUseCase = usecases.NewMoveRoversUseCase(
+		MissionControlRepository,
+		UserRepository,
+		RoverRepository,
+	)
+
 	// Initialize controllers
 	HealthCheckController = controllers.NewHealthCheckController()
 	CreateMissionControlController = controllers.NewCreateMissionControlController(CreateMissionControlUseCase)
 	GetMissionControlController = controllers.NewGetMissionControlController(GetMissionControlByUsernameUseCase)
-
+	MoveRoversController = controllers.NewMoveRoversController(MoveRoversUseCase)
 }

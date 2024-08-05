@@ -14,10 +14,29 @@ Accept: application/json
     "height": 10
   },
   "rovers": {
-    "amount": 3
+    "amount": 2
   }
 }
 
-### GET request to get mission control by username
+### POST request to create a mission control
 GET http://localhost:8080/api/mission-control/test_user
+Content-Type: application/json
 Accept: application/json
+
+
+### POST request to move the rovers by username
+POST http://localhost:8080/api/mission-control/test_user/move-rovers
+Accept: application/json
+
+{
+  "rovers": [
+    {
+      "uuid": "rover-uuid-1",
+      "commands": "LMLMLMLMM"
+    },
+    {
+      "uuid": "rover-uuid-2",
+      "commands": "MMRMMRMRRM"
+    }
+  ]
+}

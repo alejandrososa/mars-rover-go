@@ -21,9 +21,10 @@ func (r *Router) SetupRoutes() {
 	healthCheckController := config.HealthCheckController
 	createMissionControlController := config.CreateMissionControlController
 	getMissionControlController := config.GetMissionControlController
+	moveRoversController := config.MoveRoversController
 
 	r.HandleFunc("/api/health", healthCheckController.HandleRequest).Methods("GET")
 	r.HandleFunc("/api/mission-control", createMissionControlController.HandleRequest).Methods("POST")
 	r.HandleFunc("/api/mission-control/{username}", getMissionControlController.HandleRequest).Methods("GET")
-
+	r.HandleFunc("/api/mission-control/{username}/move-rovers", moveRoversController.HandleRequest).Methods("POST")
 }

@@ -45,15 +45,15 @@ func (uc *GetMissionControlByUsernameUseCase) Execute(request dto.GetMissionCont
 			Height: missionControl.Platform.Height,
 		},
 		Rovers: func() []dto.RoverResponse {
-			rovers := []dto.RoverResponse{}
-			for _, rover := range missionControl.Rovers {
-				rovers = append(rovers, dto.RoverResponse{
+			updatedRovers := make([]dto.RoverResponse, len(missionControl.Rovers))
+			for i, rover := range missionControl.Rovers {
+				updatedRovers[i] = dto.RoverResponse{
 					UUID:      rover.GetUUID(),
 					Position:  dto.PositionResponse{X: rover.GetPosition().X, Y: rover.GetPosition().Y},
 					Direction: string(rover.GetDirection()),
-				})
+				}
 			}
-			return rovers
+			return updatedRovers
 		}(),
 	}
 

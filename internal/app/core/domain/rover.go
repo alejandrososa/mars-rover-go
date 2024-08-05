@@ -29,6 +29,10 @@ func NewRover(x, y int, direction common.Direction, platform *Platform) (*Rover,
 }
 
 func (r *Rover) Move() {
+	if r.Platform == nil {
+		return
+	}
+
 	nextX, nextY := r.Position.X, r.Position.Y
 	switch r.Direction {
 	case common.North:

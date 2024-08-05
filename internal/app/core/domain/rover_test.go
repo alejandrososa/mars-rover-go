@@ -103,6 +103,38 @@ func TestSequentialCommands(t *testing.T) {
 	}
 }
 
+func TestMoveRoversWithCommands(t *testing.T) {
+	plt := setupTestPlatform()
+	rover1, _ := domain.NewRover(1, 2, common.North, plt)
+	rover2, _ := domain.NewRover(3, 3, common.East, plt)
+
+	// Commands for the first rover
+	commands1 := "LMLMLMLMM"
+	for _, cmd := range commands1 {
+		rover1.ExecuteCommand(common.Command(cmd))
+	}
+
+	// Commands for the second rover
+	commands2 := "MMRMMRMRRM"
+	for _, cmd := range commands2 {
+		rover2.ExecuteCommand(common.Command(cmd))
+	}
+
+	// Verify the expected outcome for the first rover
+	x1, y1 := rover1.GetPosition().X, rover1.GetPosition().Y
+	direction1 := rover1.GetDirection()
+	if x1 != 1 || y1 != 3 || direction1 != common.North {
+		t.Errorf("Expected rover1 position (1, 3) and direction N, got (%d, %d) and %s", x1, y1, direction1)
+	}
+
+	// Verify the expected outcome for the second rover
+	x2, y2 := rover2.GetPosition().X, rover2.GetPosition().Y
+	direction2 := rover2.GetDirection()
+	if x2 != 5 || y2 != 1 || direction2 != common.East {
+		t.Errorf("Expected rover2 position (5, 1) and direction E, got (%d, %d) and %s", x2, y2, direction2)
+	}
+}
+
 func TestObstacleEncounter(t *testing.T) {
 	plt := setupTestPlatformWithObstacles()
 	rover, _ := domain.NewRover(0, 0, common.North, plt)
