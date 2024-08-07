@@ -58,8 +58,13 @@ func (uc *CreateMissionControlUseCase) Execute(request dto.CreateMissionControlR
 
 	// Create and save the rovers
 	var rovers []dto.RoverResponse
-	for i := 0; i < request.Rovers.Amount; i++ {
-		roverControl, err := uc.RoverFactory.NewRoverControl(0, 0, common.North, platform, missionControl.Rovers)
+	for _, roverConfig := range request.Rovers {
+		x, y := roverConfig.InitialPosition.X, roverConfig.InitialPosition.Y
+		if x == 0 && y == 0 {
+			// If no initial position is provided, use default (0,0)
+			x, y = 0, 0
+		}
+		roverControl, err := uc.RoverFactory.NewRoverControl(x, y, roverConfig.Direction, platform, missionControl.Rovers)
 		if err != nil {
 			return nil, errors.New("unable to create rovers: " + err.Error())
 		}

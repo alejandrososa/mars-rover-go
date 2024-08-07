@@ -16,57 +16,47 @@ import (
 // TestCreatePlatformUseCase_Execute_Success verifies that the platform and rovers are created correctly.
 func TestCreatePlatformUseCase_Execute_Success(t *testing.T) {
 	// Arrange
-	mockPlatformRepo := new(mocks.MockPlatformRepository)
 	mockRoverRepo := new(mocks.MockRoverRepository)
 	mockMissionControlRepo := new(mocks.MockMissionControlRepository)
 	mockUserRepo := new(mocks.MockUserRepository)
-	mockRoverFactory := new(mocks.MockRoverFactory)
-	mockUUIDGenerator := new(mocks.MockUUIDGenerator)
 
-	useCase := usecases.NewCreateMissionControlUseCase(
-		mockPlatformRepo,
-		mockRoverRepo,
-		mockMissionControlRepo,
-		mockUserRepo,
-		mockRoverFactory,
-		mockUUIDGenerator,
-	)
+	useCase := usecases.NewMoveRoversUseCase(mockMissionControlRepo, mockUserRepo, mockRoverRepo)
 
-	request := dto.CreateMissionControlRequest{
+	request := dto.MoveRoversRequest{
 		Username: "test_user",
-		Platform: dto.PlatformDimensions{Width: 10, Height: 10},
-		Rovers:   dto.RoversConfig{Amount: 1},
+		Rovers: []dto.RoverCommand{
+			{UUID: "rover-uuid-1", Commands: "LMLMLMLMM"},
+			{UUID: "rover-uuid-2", Commands: "MMRMMRMRRM"},
+		},
 	}
 
-	// Set a fixed UUID for the test
-	fixedUUID := "fixed-uuid-for-testing"
-	mockUUIDGenerator.On("Generate").Return(fixedUUID).Times(4)
-
-	user := &domain.User{UUID: fixedUUID, Username: request.Username}
-	platform := &domain.Platform{
-		UUID:      fixedUUID,
-		Width:     request.Platform.Width,
-		Height:    request.Platform.Height,
-		Obstacles: []common.Position{},
+	user := &domain.User{UUID: "user-uuid", Username: "test_user"}
+	missionControl := &domain.MissionControl{
+		UUID: "mission-control-uuid",
+		Platform: &domain.Platform{
+			Width:  5,
+			Height: 5,
+		},
+		Rovers: []domain.RoverControl{},
 	}
-	rover := &domain.Rover{
-		UUID:      fixedUUID,
-		Position:  common.Position{X: 0, Y: 0},
+	rover1 := &domain.Rover{
+		UUID:      "rover-uuid-1",
+		Position:  common.Position{X: 1, Y: 2},
 		Direction: common.North,
-		Platform:  platform,
 	}
+	rover2 := &domain.Rover{
+		UUID:      "rover-uuid-2",
+		Position:  common.Position{X: 3, Y: 3},
+		Direction: common.East,
+	}
+	missionControl.Rovers = append(missionControl.Rovers, rover1, rover2)
 
-	mockUserRepo.On("Save", mock.MatchedBy(func(u *domain.User) bool {
-		return u.Username == user.Username
-	})).Return(nil)
-	mockPlatformRepo.On("Save", platform).Return(nil)
-	mockRoverFactory.On("NewRoverControl", 0, 0, common.North, platform, mock.Anything).Return(rover, nil).Once()
-	mockRoverRepo.On("Save", rover).Return(nil)
-	mockMissionControlRepo.On("Save", mock.MatchedBy(func(u *domain.User) bool {
-		return u.UUID == fixedUUID && u.Username == request.Username
-	}), mock.MatchedBy(func(mc *domain.MissionControl) bool {
-		return mc.UUID == fixedUUID && len(mc.Rovers) == 1
-	})).Return(nil)
+	mockUserRepo.On("GetByUsername", "test_user").Return(user, nil)
+	mockMissionControlRepo.On("GetByUser", user).Return(missionControl, nil)
+	mockRoverRepo.On("GetByUUID", "rover-uuid-1").Return(rover1, nil)
+	mockRoverRepo.On("GetByUUID", "rover-uuid-2").Return(rover2, nil)
+	mockRoverRepo.On("Save", rover1).Return(nil)
+	mockRoverRepo.On("Save", rover2).Return(nil)
 
 	// Act
 	response, err := useCase.Execute(request)
@@ -74,17 +64,22 @@ func TestCreatePlatformUseCase_Execute_Success(t *testing.T) {
 	// Assert
 	assert.NoError(t, err)
 	assert.NotNil(t, response)
-	assert.Equal(t, "Platform created successfully", response.Message)
-	assert.Equal(t, fixedUUID, response.MissionControl.UUID)
-	assert.Equal(t, request.Platform.Width, response.Platform.Width)
-	assert.Equal(t, request.Platform.Height, response.Platform.Height)
-	assert.Equal(t, 1, len(response.Rovers))
+	assert.Equal(t, "Rovers moved successfully", response.Message)
+	assert.Equal(t, 2, len(response.Rovers))
+
+	// Verificando posición y dirección final de Rover 1
+	assert.Equal(t, "rover-uuid-1", response.Rovers[0].UUID)
+	assert.Equal(t, dto.PositionResponse{X: 1, Y: 3}, response.Rovers[0].Position)
+	assert.Equal(t, "N", response.Rovers[0].Direction)
+
+	// Verificando posición y dirección final de Rover 2
+	assert.Equal(t, "rover-uuid-2", response.Rovers[1].UUID)
+	assert.Equal(t, dto.PositionResponse{X: 5, Y: 1}, response.Rovers[1].Position)
+	assert.Equal(t, "E", response.Rovers[1].Direction)
 
 	mockUserRepo.AssertExpectations(t)
-	mockPlatformRepo.AssertExpectations(t)
-	mockRoverFactory.AssertExpectations(t)
-	mockRoverRepo.AssertExpectations(t)
 	mockMissionControlRepo.AssertExpectations(t)
+	mockRoverRepo.AssertExpectations(t)
 }
 
 func TestCreatePlatformUseCase_Execute_Failure(t *testing.T) {
@@ -108,7 +103,9 @@ func TestCreatePlatformUseCase_Execute_Failure(t *testing.T) {
 	request := dto.CreateMissionControlRequest{
 		Username: "test_user",
 		Platform: dto.PlatformDimensions{Width: 10, Height: 10},
-		Rovers:   dto.RoversConfig{Amount: 1},
+		Rovers: []dto.RoverInitialization{
+			{InitialPosition: common.Position{X: 1, Y: 2}, Direction: common.North},
+		},
 	}
 
 	fixedUUID := "fixed-uuid-for-testing"
